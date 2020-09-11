@@ -5,16 +5,19 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.app.ActivityCompat;
+
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -149,7 +152,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -265,6 +267,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (PermissionUtils.isPermissionGranted(permissions, grantResults,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 mUiSettings.setMyLocationButtonEnabled(false);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
                 mMap.setMyLocationEnabled(true);
             } else {
                 mLocationPermissionDenied = true;
